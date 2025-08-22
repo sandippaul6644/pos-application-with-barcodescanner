@@ -1,0 +1,73 @@
+<body id="body-fulscreen">
+  <!-- Folder Selection Dialog -->
+  <div class="folder-dialog" *ngIf="showFolderDialog">
+    <div class="folder-dialog-content">
+      <h2>Setup Asset Folders</h2>
+      <div class="folder-input">
+        <label>Image Folder:</label>
+        <div class="folder-select">
+          <input type="text" [(ngModel)]="imageFolder" placeholder="Enter full path: C:\Users\sandi\Desktop\image">
+          <button (click)="selectImageFolder()">Browse</button>
+        </div>
+      </div>
+      <div class="folder-input">
+        <label>Video Folder:</label>
+        <div class="folder-select">
+          <input type="text" [(ngModel)]="videoFolder" placeholder="Enter full path: C:\Users\sandi\Desktop\video">
+          <button (click)="selectVideoFolder()">Browse</button>
+        </div>
+      </div>
+      <button class="save-btn" (click)="saveFolderSettings()">Save & Continue</button>
+    </div>
+  </div>
+  
+  <div class="_dialog_lmc66_455" *ngIf="showDialog">
+    <img alt="Close-Dialog" src="data:image/svg+xml,%3c?xml%20version='1.0'?%3e%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20width='24px'%20height='24px'%3e%3cpath%20d='M12,2C6.47,2,2,6.47,2,12s4.47,10,10,10s10-4.47,10-10S17.53,2,12,2z%20M17,15.59L15.59,17L12,13.41L8.41,17L7,15.59%20L10.59,12L7,8.41L8.41,7L12,10.59L15.59,7L17,8.41L13.41,12L17,15.59z'/%3e%3c/svg%3e" (click)="closeDialog()">
+    <button (click)="goFullScreen()">Go To FullScreen Mode</button>
+  </div>
+  <div id="root">
+    <div class="_ProductVideoMain_lmc66_1" [class.hide-content]="showDialog"
+      style="background-image: url(&quot;/assets/Background-Img-Dqi-8U1M.png&quot;);">
+      <div class="_ProductVideoWrapper_lmc66_51">
+        <div class="_header_lmc66_65"><img alt="LOGO" src="/assets/Logo-BOcKownt.png"><span>Showroom
+            Display</span>
+        </div>
+        <div class="_contentWrapperMain_lmc66_143">
+          <div class="_contentWrapper_lmc66_143">
+            <div class="_searchWrapperMain_lmc66_177">
+              <div class="_searchDiv_lmc66_199">
+                <input placeholder="Scan barcode..." type="text" 
+                       [(ngModel)]="searchTerm" 
+                       (keyup.enter)="onSearch()">
+
+              </div>
+              <button class="_clearBtn_lmc66_225" (click)="onClear()">Clear</button>
+            </div>
+            <div class="_img_VideoWrapper_lmc66_321" [style.position]="hasSearched ? 'relative' : 'static'">
+              <!-- Initial state: show both image and video side by side -->
+              <div class="_imgWrapper_lmc66_341" *ngIf="!hasSearched || showImage"><img alt="Product" [src]="imageSrc"></div>
+              <div class="_videoWrapper_lmc66_367" *ngIf="!hasSearched || !showImage">
+                <video [src]="videoSrc" preload="metadata" controls="" autoplay="" loop="" muted
+                  style="width: 100%; height: 100%; object-fit: fill; display: block;"
+                  (error)="onVideoError()"
+                  (loadstart)="onVideoLoadStart()"
+                  (canplay)="onVideoCanPlay()"
+                  crossorigin="anonymous"></video>
+              </div>
+              <button *ngIf="hasSearched && hasVideo" class="arrow-btn" (click)="toggleView()" 
+                      style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); 
+                             background: rgba(0,0,0,0.7); color: white; border: none; 
+                             border-radius: 50%; width: 50px; height: 50px; cursor: pointer; 
+                             font-size: 20px; display: flex; align-items: center; justify-content: center;">
+                {{ showImage ? '▶' : '🖼' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+</body>
