@@ -1,25 +1,5 @@
 <body id="body-fulscreen">
-  <!-- Folder Selection Dialog -->
-  <div class="folder-dialog" *ngIf="showFolderDialog">
-    <div class="folder-dialog-content">
-      <h2>Setup Asset Folders</h2>
-      <div class="folder-input">
-        <label>Image Folder:</label>
-        <div class="folder-select">
-          <input type="text" [(ngModel)]="imageFolder" placeholder="Enter full path: C:\Users\sandi\Desktop\image">
-          <button (click)="selectImageFolder()">Browse</button>
-        </div>
-      </div>
-      <div class="folder-input">
-        <label>Video Folder:</label>
-        <div class="folder-select">
-          <input type="text" [(ngModel)]="videoFolder" placeholder="Enter full path: C:\Users\sandi\Desktop\video">
-          <button (click)="selectVideoFolder()">Browse</button>
-        </div>
-      </div>
-      <button class="save-btn" (click)="saveFolderSettings()">Save & Continue</button>
-    </div>
-  </div>
+
   
   <div class="_dialog_lmc66_455" *ngIf="showDialog">
     <img alt="Close-Dialog" src="data:image/svg+xml,%3c?xml%20version='1.0'?%3e%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20width='24px'%20height='24px'%3e%3cpath%20d='M12,2C6.47,2,2,6.47,2,12s4.47,10,10,10s10-4.47,10-10S17.53,2,12,2z%20M17,15.59L15.59,17L12,13.41L8.41,17L7,15.59%20L10.59,12L7,8.41L8.41,7L12,10.59L15.59,7L17,8.41L13.41,12L17,15.59z'/%3e%3c/svg%3e" (click)="closeDialog()">

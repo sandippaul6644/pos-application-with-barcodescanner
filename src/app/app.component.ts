@@ -20,8 +20,8 @@ export class AppComponent {
   private barcodeBuffer = '';
   private barcodeTimeout: any;
   showFolderDialog = false;
-  imageFolder = '';
-  videoFolder = '';
+  imageFolder = 'C:\\Users\\giris\\OneDrive\\Desktop\\image';
+  videoFolder = 'C:\\Users\\giris\\OneDrive\\Desktop\\video';
 
   constructor(
     private fileService: FileService,
@@ -32,13 +32,12 @@ export class AppComponent {
   }
 
   private async checkFolderSettings() {
-    // Always show folder dialog on startup
-    this.showFolderDialog = true;
-    this.showDialog = false; // Hide fullscreen dialog
+    // Skip folder dialog and use static paths
+    this.showFolderDialog = false;
+    this.showDialog = true;
     
-    // Start with empty values so user must enter full paths
-    this.imageFolder = '';
-    this.videoFolder = '';
+    // Update server with static paths
+    await this.updateServerFolders();
   }
 
   selectImageFolder() {
@@ -160,6 +159,9 @@ export class AppComponent {
 
   private async processBarcodeInput(barcode: string) {
     console.log('Barcode scanned:', barcode);
+    // Clear previous search first
+    this.onClear();
+    // Set new search term and search
     this.searchTerm = barcode;
     await this.onSearch();
   }

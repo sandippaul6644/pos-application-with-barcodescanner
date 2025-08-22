@@ -12,10 +12,9 @@ app.use((req, res, next) => {
   next();
 });
 
-// Desktop paths
-const os = require('os');
-let imageFolderPath = path.join(os.homedir(), 'Desktop', 'image');
-let videoFolderPath = path.join(os.homedir(), 'Desktop', 'video');
+// Static paths
+let imageFolderPath = 'C:\\Users\\giris\\OneDrive\\Desktop\\image';
+let videoFolderPath = 'C:\\Users\\giris\\OneDrive\\Desktop\\video';
 
 // Dynamic static file serving
 app.use('/images', (req, res, next) => {
