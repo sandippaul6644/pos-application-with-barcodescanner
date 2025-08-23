@@ -1,8 +1,5 @@
 node_modules/
 dist/
 .angular/
+share/
 *.log
-.env
-.DS_Store
-Thumbs.db
-node_modules
