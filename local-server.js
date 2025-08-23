@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
@@ -12,13 +13,16 @@ app.use((req, res, next) => {
   next();
 });
 
+// Load paths from environment variables
+let imageFolderPath = process.env.IMAGE_FOLDER || 'C:\\Users\\sandi\\Desktop\\image';
+let videoFolderPath = process.env.VIDEO_FOLDER || 'C:\\Users\\sandi\\Desktop\\video';
+
 // Static paths   ayan system
 // let imageFolderPath = 'C:\\Users\\giris\\OneDrive\\Desktop\\image';
 // let videoFolderPath = 'C:\\Users\\giris\\OneDrive\\Desktop\\video';
 
-// sandi system 
-let imageFolderPath = 'C:\\Users\\sandi\\Desktop\\image';
-let videoFolderPath = 'C:\\Users\\sandi\\Desktop\\video';
+
+
 
 // Dynamic static file serving
 app.use('/images', (req, res, next) => {

@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { FileService } from "./file.service";
 import { DesktopFileService } from "./desktop-file.service";
+import { environment } from "../environments/environment";
 
 @Component({
   selector: "app-root",
@@ -22,8 +23,11 @@ export class AppComponent {
   private barcodeBuffer = "";
   private barcodeTimeout: any;
   showFolderDialog = false;
-  imageFolder = "C:\\Users\\sandi\\Desktop\\image";
-  videoFolder = "C:\\Users\\sandi\\Desktop\\video";
+  imageFolder = environment.imageFolder;
+  videoFolder = environment.videoFolder;
+
+  // imageFolder = "C:\\Users\\sandi\\Desktop\\image";
+  // videoFolder = "C:\\Users\\sandi\\Desktop\\video";
 
   constructor(
     private fileService: FileService,
