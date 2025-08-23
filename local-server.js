@@ -12,9 +12,13 @@ app.use((req, res, next) => {
   next();
 });
 
-// Static paths
-let imageFolderPath = 'C:\\Users\\giris\\OneDrive\\Desktop\\image';
-let videoFolderPath = 'C:\\Users\\giris\\OneDrive\\Desktop\\video';
+// Static paths   ayan system
+// let imageFolderPath = 'C:\\Users\\giris\\OneDrive\\Desktop\\image';
+// let videoFolderPath = 'C:\\Users\\giris\\OneDrive\\Desktop\\video';
+
+// sandi system 
+let imageFolderPath = 'C:\\Users\\sandi\\Desktop\\image';
+let videoFolderPath = 'C:\\Users\\sandi\\Desktop\\video';
 
 // Dynamic static file serving
 app.use('/images', (req, res, next) => {
@@ -37,7 +41,7 @@ app.post('/api/set-folders', express.json(), (req, res) => {
     videoFolderPath = videoFolder;
     console.log('Updated video folder to:', videoFolderPath);
   }
-  
+
   console.log('Current paths - Image:', imageFolderPath, 'Video:', videoFolderPath);
   res.json({ success: true, imageFolderPath, videoFolderPath });
 });
@@ -46,14 +50,14 @@ app.post('/api/set-folders', express.json(), (req, res) => {
 app.get('/api/search/:searchTerm', (req, res) => {
   const searchTerm = req.params.searchTerm;
   const result = { image: null, video: null };
-  
+
   const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
   const videoExtensions = ['.mp4', '.avi', '.mov', '.wmv', '.flv', '.webm'];
-  
+
   console.log(`Searching for: ${searchTerm}`);
   console.log(`Image folder: ${imageFolderPath}`);
   console.log(`Video folder: ${videoFolderPath}`);
-  
+
   // Check if folders exist
   if (!fs.existsSync(imageFolderPath)) {
     console.log('Image folder does not exist!');
@@ -61,7 +65,7 @@ app.get('/api/search/:searchTerm', (req, res) => {
   if (!fs.existsSync(videoFolderPath)) {
     console.log('Video folder does not exist!');
   }
-  
+
   // Search for image
   for (const ext of imageExtensions) {
     const imagePath = path.join(imageFolderPath, `${searchTerm}${ext}`);
@@ -72,7 +76,7 @@ app.get('/api/search/:searchTerm', (req, res) => {
       break;
     }
   }
-  
+
   // Search for video
   for (const ext of videoExtensions) {
     const videoPath = path.join(videoFolderPath, `${searchTerm}${ext}`);
@@ -83,7 +87,7 @@ app.get('/api/search/:searchTerm', (req, res) => {
       break;
     }
   }
-  
+
   console.log(`Result:`, result);
   res.json(result);
 });

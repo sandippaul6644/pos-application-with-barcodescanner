@@ -1,8 +1,8 @@
 {
-  "name": "my-angular-app",
+  "name": "pos-video-player",
   "version": "1.0.0",
   "scripts": {
-    "start": "ng serve & node local-server.js",
+    "start": "concurrently \"node local-server.js\" \"ng serve --port 4200\"",
     "build": "ng build",
     "electron": "electron .",
     "electron-dev": "ng build && electron .",
@@ -26,6 +26,7 @@
     "@angular-devkit/build-angular": "^15.0.0",
     "@angular/cli": "^15.0.0",
     "@angular/compiler-cli": "^15.0.0",
+    "concurrently": "^7.6.0",
     "electron": "^22.0.0",
     "electron-builder": "^23.0.0",
     "express": "^4.21.2",
