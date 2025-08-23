@@ -14,14 +14,15 @@ export class AppComponent {
   videoSrc = '/assets/fallback-video.mp4';
   imageSrc = '/assets/fallback-image.jpg';
   searchTerm = '';
-  showImage = true;
+  showImage = false;
   hasVideo = false;
+  hasImage = false;
   hasSearched = false;
   private barcodeBuffer = '';
   private barcodeTimeout: any;
   showFolderDialog = false;
-  imageFolder = 'C:\\Users\\giris\\OneDrive\\Desktop\\image';
-  videoFolder = 'C:\\Users\\giris\\OneDrive\\Desktop\\video';
+  imageFolder = 'C:\\Users\\sandi\\Desktop\\image';
+  videoFolder = 'C:\\Users\\sandi\\Desktop\\video';
 
   constructor(
     private fileService: FileService,
@@ -175,7 +176,7 @@ export class AppComponent {
       // Reset to fallback when search is empty
       this.imageSrc = '/assets/fallback-image.jpg';
       this.videoSrc = '/assets/fallback-video.mp4';
-      this.showImage = true;
+      this.showImage = false;
       this.hasVideo = false;
       return;
     }
@@ -187,11 +188,14 @@ export class AppComponent {
     
     console.log('Search results:', assets);
     
-    // Update image source
+    // Update image source and track if image exists
+    let hasImage = false;
     if (assets.image) {
       this.imageSrc = assets.image;
+      hasImage = true;
     } else {
-      this.imageSrc = '/assets/fallback-image.jpg';
+      this.imageSrc = '/assets/no image.png';
+      hasImage = false;
     }
     
     // Update video source and check if video exists
@@ -203,8 +207,17 @@ export class AppComponent {
       this.hasVideo = false;
     }
     
-    // Always show image first after search
-    this.showImage = true;
+    // Store hasImage for toggle button logic
+    this.hasImage = hasImage;
+    
+    // Show video first if available, otherwise show image
+    if (assets.video) {
+      this.showImage = false; // Show video first
+    } else if (assets.image) {
+      this.showImage = true; // Show image if no video
+    } else {
+      this.showImage = false; // Show no video if neither found
+    }
     this.hasSearched = true;
   }
 
@@ -212,8 +225,9 @@ export class AppComponent {
     this.searchTerm = '';
     this.imageSrc = '/assets/fallback-image.jpg';
     this.videoSrc = '/assets/fallback-video.mp4';
-    this.showImage = true;
+    this.showImage = false;
     this.hasVideo = false;
+    this.hasImage = false;
     this.hasSearched = false;
   }
 
