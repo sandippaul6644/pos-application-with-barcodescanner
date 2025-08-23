@@ -11,8 +11,12 @@
     <div class="_ProductVideoMain_lmc66_1" [class.hide-content]="showDialog"
       style="background-image: url(&quot;/assets/Background-Img-Dqi-8U1M.png&quot;);">
       <div class="_ProductVideoWrapper_lmc66_51">
-        <div class="_header_lmc66_65"><img alt="LOGO" src="/assets/Logo-BOcKownt.png"><span>Showroom
-            Display</span>
+        <div class="_header_lmc66_65">
+          <img alt="LOGO" src="/assets/Logo-BOcKownt.png">
+          <span>Showroom Display</span>
+          <button class="fullscreen-btn" (click)="toggleFullScreen()" [title]="isFullScreen ? 'Exit Full Screen' : 'Enter Full Screen'">
+            {{ isFullScreen ? '⛉' : '⛶' }}
+          </button>
         </div>
         <div class="_contentWrapperMain_lmc66_143">
           <div class="_contentWrapper_lmc66_143">

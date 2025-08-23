@@ -1,28 +1,29 @@
-import { Component } from '@angular/core';
-import { FileService } from './file.service';
-import { DesktopFileService } from './desktop-file.service';
+import { Component } from "@angular/core";
+import { FileService } from "./file.service";
+import { DesktopFileService } from "./desktop-file.service";
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  selector: "app-root",
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.css"],
 })
 export class AppComponent {
-  title = 'my-angular-app';
-  message = '';
+  title = "my-angular-app";
+  message = "";
   showDialog = true;
-  videoSrc = '/assets/fallback-video.mp4';
-  imageSrc = '/assets/fallback-image.jpg';
-  searchTerm = '';
+  videoSrc = "/assets/fallback-video.mp4";
+  imageSrc = "/assets/fallback-image.jpg";
+  searchTerm = "";
   showImage = false;
   hasVideo = false;
   hasImage = false;
   hasSearched = false;
-  private barcodeBuffer = '';
+  isFullScreen = false;
+  private barcodeBuffer = "";
   private barcodeTimeout: any;
   showFolderDialog = false;
-  imageFolder = 'C:\\Users\\sandi\\Desktop\\image';
-  videoFolder = 'C:\\Users\\sandi\\Desktop\\video';
+  imageFolder = "C:\\Users\\sandi\\Desktop\\image";
+  videoFolder = "C:\\Users\\sandi\\Desktop\\video";
 
   constructor(
     private fileService: FileService,
@@ -36,14 +37,14 @@ export class AppComponent {
     // Skip folder dialog and use static paths
     this.showFolderDialog = false;
     this.showDialog = true;
-    
+
     // Update server with static paths
     await this.updateServerFolders();
   }
 
   selectImageFolder() {
-    const input = document.createElement('input');
-    input.type = 'file';
+    const input = document.createElement("input");
+    input.type = "file";
     input.webkitdirectory = true;
     input.onchange = (event: any) => {
       const files = event.target.files;
@@ -52,22 +53,25 @@ export class AppComponent {
         // Use the full system path if available, otherwise construct from webkitRelativePath
         if (file.path) {
           // Electron/desktop - use full path and remove filename
-          this.imageFolder = file.path.substring(0, file.path.lastIndexOf('\\') || file.path.lastIndexOf('/'));
+          this.imageFolder = file.path.substring(
+            0,
+            file.path.lastIndexOf("\\") || file.path.lastIndexOf("/")
+          );
         } else {
           // Web browser - get folder name from webkitRelativePath
           const relativePath = file.webkitRelativePath;
-          const folderName = relativePath.split('/')[0];
+          const folderName = relativePath.split("/")[0];
           this.imageFolder = folderName;
         }
-        console.log('Selected image folder:', this.imageFolder);
+        console.log("Selected image folder:", this.imageFolder);
       }
     };
     input.click();
   }
 
   selectVideoFolder() {
-    const input = document.createElement('input');
-    input.type = 'file';
+    const input = document.createElement("input");
+    input.type = "file";
     input.webkitdirectory = true;
     input.onchange = (event: any) => {
       const files = event.target.files;
@@ -76,63 +80,66 @@ export class AppComponent {
         // Use the full system path if available, otherwise construct from webkitRelativePath
         if (file.path) {
           // Electron/desktop - use full path and remove filename
-          this.videoFolder = file.path.substring(0, file.path.lastIndexOf('\\') || file.path.lastIndexOf('/'));
+          this.videoFolder = file.path.substring(
+            0,
+            file.path.lastIndexOf("\\") || file.path.lastIndexOf("/")
+          );
         } else {
           // Web browser - get folder name from webkitRelativePath
           const relativePath = file.webkitRelativePath;
-          const folderName = relativePath.split('/')[0];
+          const folderName = relativePath.split("/")[0];
           this.videoFolder = folderName;
         }
-        console.log('Selected video folder:', this.videoFolder);
+        console.log("Selected video folder:", this.videoFolder);
       }
     };
     input.click();
   }
 
   async saveFolderSettings() {
-    console.log('Saving folders:', this.imageFolder, this.videoFolder);
+    console.log("Saving folders:", this.imageFolder, this.videoFolder);
     if (this.imageFolder && this.videoFolder) {
-      localStorage.setItem('pos-image-folder', this.imageFolder);
-      localStorage.setItem('pos-video-folder', this.videoFolder);
-      
+      localStorage.setItem("pos-image-folder", this.imageFolder);
+      localStorage.setItem("pos-video-folder", this.videoFolder);
+
       // Send folder paths to local server with retry
       await this.updateServerFolders();
-      
+
       this.showFolderDialog = false;
       this.showDialog = false; // Don't show fullscreen dialog
     } else {
-      alert('Please select both image and video folders');
+      alert("Please select both image and video folders");
     }
   }
 
   private async updateServerFolders(retries = 3) {
-    console.log('Sending to server:', this.imageFolder, this.videoFolder);
+    console.log("Sending to server:", this.imageFolder, this.videoFolder);
     for (let i = 0; i < retries; i++) {
       try {
-        const response = await fetch('http://localhost:3001/api/set-folders', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+        const response = await fetch("http://localhost:3001/api/set-folders", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             imageFolder: this.imageFolder,
-            videoFolder: this.videoFolder
-          })
+            videoFolder: this.videoFolder,
+          }),
         });
-        
+
         if (response.ok) {
-          console.log('Folders updated on server');
+          console.log("Folders updated on server");
           return;
         }
       } catch (error) {
-        console.log('Server update failed:', error);
+        console.log("Server update failed:", error);
         if (i < retries - 1) {
-          await new Promise(resolve => setTimeout(resolve, 2000));
+          await new Promise((resolve) => setTimeout(resolve, 2000));
         }
       }
     }
   }
 
   private initializeBarcodeScanner() {
-    document.addEventListener('keydown', (event) => {
+    document.addEventListener("keydown", (event) => {
       // Ignore if user is typing in input field
       if (event.target instanceof HTMLInputElement) {
         return;
@@ -150,16 +157,17 @@ export class AppComponent {
 
       // Set timeout to process barcode (barcode scanners are fast)
       this.barcodeTimeout = setTimeout(() => {
-        if (this.barcodeBuffer.length > 3) { // Minimum barcode length
+        if (this.barcodeBuffer.length > 3) {
+          // Minimum barcode length
           this.processBarcodeInput(this.barcodeBuffer);
         }
-        this.barcodeBuffer = '';
+        this.barcodeBuffer = "";
       }, 100); // 100ms timeout for barcode completion
     });
   }
 
   private async processBarcodeInput(barcode: string) {
-    console.log('Barcode scanned:', barcode);
+    console.log("Barcode scanned:", barcode);
     // Clear previous search first
     this.onClear();
     // Set new search term and search
@@ -168,48 +176,50 @@ export class AppComponent {
   }
 
   showMessage() {
-    this.message = 'Hello from Angular!';
+    this.message = "Hello from Angular!";
   }
 
   async onSearch() {
     if (!this.searchTerm.trim()) {
       // Reset to fallback when search is empty
-      this.imageSrc = '/assets/fallback-image.jpg';
-      this.videoSrc = '/assets/fallback-video.mp4';
+      this.imageSrc = "/assets/fallback-image.jpg";
+      this.videoSrc = "/assets/fallback-video.mp4";
       this.showImage = false;
       this.hasVideo = false;
       return;
     }
 
-    console.log('Searching for:', this.searchTerm.trim());
-    
+    console.log("Searching for:", this.searchTerm.trim());
+
     // Try desktop file service first, then fallback to web service
-    const assets = await this.desktopFileService.searchAssets(this.searchTerm.trim());
-    
-    console.log('Search results:', assets);
-    
+    const assets = await this.desktopFileService.searchAssets(
+      this.searchTerm.trim()
+    );
+
+    console.log("Search results:", assets);
+
     // Update image source and track if image exists
     let hasImage = false;
     if (assets.image) {
       this.imageSrc = assets.image;
       hasImage = true;
     } else {
-      this.imageSrc = '/assets/no image.png';
+      this.imageSrc = "/assets/no image.png";
       hasImage = false;
     }
-    
+
     // Update video source and check if video exists
     if (assets.video) {
       this.videoSrc = assets.video;
       this.hasVideo = true;
     } else {
-      this.videoSrc = '/assets/fallback-video.mp4';
+      this.videoSrc = "/assets/fallback-video.mp4";
       this.hasVideo = false;
     }
-    
+
     // Store hasImage for toggle button logic
     this.hasImage = hasImage;
-    
+
     // Show video first if available, otherwise show image
     if (assets.video) {
       this.showImage = false; // Show video first
@@ -222,9 +232,9 @@ export class AppComponent {
   }
 
   onClear() {
-    this.searchTerm = '';
-    this.imageSrc = '/assets/fallback-image.jpg';
-    this.videoSrc = '/assets/fallback-video.mp4';
+    this.searchTerm = "";
+    this.imageSrc = "/assets/fallback-image.jpg";
+    this.videoSrc = "/assets/fallback-video.mp4";
     this.showImage = false;
     this.hasVideo = false;
     this.hasImage = false;
@@ -236,34 +246,46 @@ export class AppComponent {
     this.playVideo();
   }
 
-  goFullScreen() {
-    const elem = document.documentElement;
-    if (elem.requestFullscreen) {
-      elem.requestFullscreen();
+  toggleFullScreen() {
+    if (!this.isFullScreen) {
+      const elem = document.documentElement;
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      }
+      this.isFullScreen = true;
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+      this.isFullScreen = false;
     }
     this.showDialog = false;
     this.playVideo();
   }
 
+  goFullScreen() {
+    this.toggleFullScreen();
+  }
+
   onVideoError() {
-    console.log('Video error, trying fallback URL');
-    this.videoSrc = 'http://65.109.4.213:8000/api/V1/video/fallBack';
-    
+    console.log("Video error, trying fallback URL");
+    this.videoSrc = "http://65.109.4.213:8000/api/V1/video/fallBack";
+
     // If fallback also fails, use local fallback
     setTimeout(() => {
-      const video = document.querySelector('video');
+      const video = document.querySelector("video");
       if (video && video.networkState === HTMLMediaElement.NETWORK_NO_SOURCE) {
-        this.videoSrc = '/assets/fallback-video.mp4';
+        this.videoSrc = "/assets/fallback-video.mp4";
       }
     }, 3000);
   }
 
   onVideoLoadStart() {
-    console.log('Video loading started:', this.videoSrc);
+    console.log("Video loading started:", this.videoSrc);
   }
 
   onVideoCanPlay() {
-    console.log('Video can play:', this.videoSrc);
+    console.log("Video can play:", this.videoSrc);
   }
 
   toggleView() {
@@ -275,10 +297,10 @@ export class AppComponent {
 
   playVideo() {
     setTimeout(() => {
-      const video = document.querySelector('video');
+      const video = document.querySelector("video");
       if (video) {
         video.load();
-        video.play().catch(e => console.log('Autoplay failed:', e));
+        video.play().catch((e) => console.log("Autoplay failed:", e));
       }
     }, 100);
   }
