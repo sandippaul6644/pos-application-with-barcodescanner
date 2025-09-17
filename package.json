@@ -2,7 +2,7 @@
   "name": "pos-video-player",
   "version": "1.0.0",
   "scripts": {
-    "start": "npm run create-share && npm run kill-ports && concurrently \"node local-server.js\" \"ng serve --port 4200\"",
+    "start": "npm run kill-ports && concurrently \"node local-server.js\" \"ng serve --port 4200\"",
     "create-share": "node create-share.js",
     "kill-ports": "npx kill-port 3001 4200 || echo Ports cleared",
     "build": "ng build",
