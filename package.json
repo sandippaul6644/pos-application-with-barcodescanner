@@ -3,7 +3,36 @@
   "version": "1.0.0",
   "scripts": {
     "start": "concurrently \"node local-server.js\" \"ng serve --port 4200 --host 0.0.0.0 --open\"",
-    "build": "ng build"
+    "build": "ng build",
+    "electron": "electron .",
+    "electron-dev": "ng build && electron .",
+    "build-desktop": "ng build && electron-builder",
+    "dist": "ng build --configuration production && electron-builder"
+  },
+  "main": "electron-main.js",
+  "build": {
+    "appId": "com.pos.application",
+    "productName": "POS Application",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "local-server.js",
+      "electron-main.js",
+      "package.json",
+      "node_modules/**/*"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "src/assets/Logo-BOcKownt.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
   },
   "dependencies": {
     "@angular/animations": "^15.0.0",
@@ -23,6 +52,8 @@
     "@angular/cli": "^15.0.0",
     "@angular/compiler-cli": "^15.0.0",
     "concurrently": "^7.6.0",
+    "electron": "^22.0.0",
+    "electron-builder": "^23.0.0",
     "express": "^4.21.2",
     "typescript": "~4.9.0"
   }
