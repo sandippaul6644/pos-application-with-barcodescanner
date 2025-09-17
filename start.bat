@@ -1,48 +1,46 @@
 @echo off
-echo Starting POS Application...
+echo ========================================
+echo    POS Application - Windows Setup
+echo ========================================
 echo.
 
 REM Check if Node.js is installed
 node --version >nul 2>&1
 if errorlevel 1 (
-    echo ERROR: Node.js is not installed or not in PATH
+    echo ERROR: Node.js is not installed!
     echo Please install Node.js from https://nodejs.org/
+    echo.
     pause
     exit /b 1
 )
 
-REM Kill existing processes on ports 3001 and 4200
-echo Stopping existing servers...
-for /f "tokens=5" %%a in ('netstat -aon ^| find ":3001"') do taskkill /f /pid %%a >nul 2>&1
-for /f "tokens=5" %%a in ('netstat -aon ^| find ":4200"') do taskkill /f /pid %%a >nul 2>&1
+echo Node.js found: 
+node --version
 
-REM Start file server
-echo Starting file server...
-start /B "File Server" node local-server.js
-
-REM Wait a moment for server to start
-timeout /t 3 /nobreak >nul
-
-REM Start a simple HTTP server for the built Angular app
-echo Starting web server...
-start /B "Web Server" node node_modules/http-server/bin/http-server dist/my-angular-app -p 4200 -c-1
-
-REM Wait for servers to start
-timeout /t 3 /nobreak >nul
-
-REM Open browser
-echo Opening application...
-start http://localhost:4200
+REM Check if node_modules exists
+if not exist "node_modules" (
+    echo.
+    echo Installing dependencies...
+    npm install
+    if errorlevel 1 (
+        echo.
+        echo ERROR: Failed to install dependencies!
+        pause
+        exit /b 1
+    )
+    echo Dependencies installed successfully!
+) else (
+    echo Dependencies already installed.
+)
 
 echo.
-echo Application started successfully!
-echo File server: http://localhost:3001
-echo Web app: http://localhost:4200
+echo Starting POS Application...
+echo File server will run on: http://localhost:3001
+echo Web app will run on: http://localhost:4200
 echo.
-echo Press any key to stop servers...
-pause >nul
+echo The application will open automatically in your browser.
+echo Press Ctrl+C to stop the servers.
+echo.
 
-REM Stop servers
-for /f "tokens=5" %%a in ('netstat -aon ^| find ":3001"') do taskkill /f /pid %%a >nul 2>&1
-for /f "tokens=5" %%a in ('netstat -aon ^| find ":4200"') do taskkill /f /pid %%a >nul 2>&1
-echo Servers stopped.
+REM Start the application
+npm start

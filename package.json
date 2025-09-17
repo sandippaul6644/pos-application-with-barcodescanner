@@ -2,16 +2,9 @@
   "name": "pos-video-player",
   "version": "1.0.0",
   "scripts": {
-    "start": "npm run kill-ports && concurrently \"node local-server.js\" \"ng serve --port 4200\"",
-    "create-share": "node create-share.js",
-    "kill-ports": "npx kill-port 3001 4200 || echo Ports cleared",
-    "build": "ng build",
-    "electron": "electron .",
-    "electron-dev": "ng build && electron .",
-    "build-electron": "ng build --prod && electron-builder",
-    "serve-files": "node local-server.js"
+    "start": "concurrently \"node local-server.js\" \"ng serve --port 4200 --host 0.0.0.0 --open\"",
+    "build": "ng build"
   },
-  "main": "electron-main.js",
   "dependencies": {
     "@angular/animations": "^15.0.0",
     "@angular/common": "^15.0.0",
@@ -30,11 +23,7 @@
     "@angular/cli": "^15.0.0",
     "@angular/compiler-cli": "^15.0.0",
     "concurrently": "^7.6.0",
-    "electron": "^22.0.0",
-    "electron-builder": "^23.0.0",
     "express": "^4.21.2",
-    "http-server": "^14.1.1",
-    "kill-port": "^2.0.1",
     "typescript": "~4.9.0"
   }
 }
