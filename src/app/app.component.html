@@ -31,18 +31,18 @@
               <!-- Show image only after search when toggled -->
               <div class="_imgWrapper_lmc66_341" *ngIf="hasSearched && showImage">
                 <img alt="Product" [src]="imageSrc" 
-                     style="width: 100%; height: 100%; object-fit: fill; display: block;">
+                     style="width: 100%; height: 100%; object-fit: contain; display: block;">
               </div>
               <!-- Show video initially and when not showing image -->
               <div class="_videoWrapper_lmc66_367" *ngIf="!hasSearched || !showImage">
                 <video *ngIf="!hasSearched || hasVideo" [src]="videoSrc" preload="metadata" controls="" autoplay="" loop="" muted
-                  style="width: 100%; height: 100%; object-fit: fill; display: block;"
+                  style="width: 100%; height: 100%; object-fit: contain; display: block;"
                   (error)="onVideoError()"
                   (loadstart)="onVideoLoadStart()"
                   (canplay)="onVideoCanPlay()"
                   crossorigin="anonymous"></video>
                 <img *ngIf="hasSearched && !hasVideo" [src]="'/assets/no video.png'" alt="No Video" 
-                  style="width: 100%; height: 100%; object-fit: fill; display: block;">
+                  style="width: 100%; height: 100%; object-fit: contain; display: block;">
               </div>
               <button *ngIf="hasSearched && (hasVideo || hasImage)" class="arrow-btn" (click)="toggleView()" 
                       style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); 

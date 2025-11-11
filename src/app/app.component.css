@@ -148,7 +148,7 @@ body {
 }
 
 ._img_VideoWrapper_lmc66_321 {
-  height: calc(87vh - 100px);
+  height: calc(100vh - 160px);
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
